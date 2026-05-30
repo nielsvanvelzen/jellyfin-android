@@ -62,6 +62,7 @@ val applicationModule = module {
     single { PermissionRequestHelper() }
     single { RemoteVolumeProvider(get()) }
     single(named(PLAYER_EVENT_CHANNEL)) { Channel<PlayerEvent>() }
+    single { StorageManager(get(), get()) }
 
     // Controllers
     single { ApiClientController(get(), get(), get(), get(), get()) }

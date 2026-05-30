@@ -2,7 +2,6 @@ package org.jellyfin.mobile.app
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Environment
 import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import androidx.core.content.edit
 import org.jellyfin.mobile.player.mediasegments.MediaSegmentAction
@@ -11,7 +10,6 @@ import org.jellyfin.mobile.settings.ExternalPlayerPackage
 import org.jellyfin.mobile.settings.VideoPlayerType
 import org.jellyfin.mobile.utils.Constants
 import org.jellyfin.sdk.model.api.MediaSegmentType
-import java.io.File
 
 class AppPreferences(context: Context) {
     private val sharedPreferences: SharedPreferences =
@@ -67,39 +65,12 @@ class AppPreferences(context: Context) {
             }
         }
 
-    var downloadLocation: String
-        get() {
-            val savedStorage = sharedPreferences.getString(Constants.PREF_DOWNLOAD_LOCATION, null)
-            if (savedStorage != null) {
-                if (File(savedStorage).parentFile?.isDirectory == true) {
-                    // Saved location is still valid
-                    return savedStorage
-                } else {
-                    // Reset download option if corrupt
-                    sharedPreferences.edit {
-                        remove(Constants.PREF_DOWNLOAD_LOCATION)
-                    }
-                }
-            }
-
-            // Return default storage location
-            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-        }
+    var storageLocation: String?
+        get() = sharedPreferences.getString(Constants.PREF_STORAGE_LOCATION, null)
         set(value) {
             sharedPreferences.edit {
-                if (File(value).parentFile?.isDirectory == true) {
-                    putString(Constants.PREF_DOWNLOAD_LOCATION, value)
-                }
-            }
-        }
-
-    var downloadToInternal: Boolean?
-        get() = sharedPreferences.getBoolean(Constants.PREF_DOWNLOAD_INTERNAL, true)
-        set(value) {
-            if (value != null) {
-                sharedPreferences.edit {
-                    putBoolean(Constants.PREF_DOWNLOAD_METHOD, value)
-                }
+                if (value == null) remove(Constants.PREF_STORAGE_LOCATION)
+                else putString(Constants.PREF_STORAGE_LOCATION, value)
             }
         }
 

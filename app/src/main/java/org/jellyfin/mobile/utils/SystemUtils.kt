@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Environment
 import android.os.PowerManager
 import android.provider.Settings
 import android.provider.Settings.System.ACCELEROMETER_ROTATION
@@ -173,25 +172,6 @@ fun Context.createMediaNotificationChannel(notificationManager: NotificationMana
             description = "Media notifications"
         }
         notificationManager.createNotificationChannel(notificationChannel)
-    }
-}
-
-fun Context.getDownloadsPaths(): List<String> = ArrayList<String>().apply {
-    for (directory in getExternalFilesDirs(null)) {
-        // Ignore currently unavailable shared storage
-        if (directory == null) continue
-
-        val path = directory.absolutePath
-        val androidFolderIndex = path.indexOf("/Android")
-        if (androidFolderIndex == -1) continue
-
-        val storageDirectory = File(path.substring(0, androidFolderIndex))
-        if (storageDirectory.isDirectory) {
-            add(File(storageDirectory, Environment.DIRECTORY_DOWNLOADS).absolutePath)
-        }
-    }
-    if (isEmpty()) {
-        add(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath)
     }
 }
 
