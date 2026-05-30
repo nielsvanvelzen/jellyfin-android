@@ -111,6 +111,17 @@
             android:grantUriPermissions="true"
             android:readPermission="android.permission.MEDIA_CONTENT_CONTROL" />
 
+        <provider
+            android:name=".contentprovider.MediaContentProvider"
+            android:authorities="${applicationId}.contentprovider.MediaContentProvider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
