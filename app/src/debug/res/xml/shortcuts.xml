@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="downloads"
+        android:shortcutLongLabel="@string/downloads"
+        android:shortcutShortLabel="@string/downloads">
+
+        <intent
+            android:action="org.jellyfin.OPEN_DOWNLOADS"
+            android:targetClass="org.jellyfin.mobile.MainActivity"
+            android:targetPackage="org.jellyfin.mobile.debug" />
+    </shortcut>
+
+</shortcuts>
