@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.ShortcutManager
 import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
@@ -22,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.jellyfin.mobile.events.ActivityEvent
 import org.jellyfin.mobile.events.ActivityEventHandler
 import org.jellyfin.mobile.player.cast.Chromecast
 import org.jellyfin.mobile.player.cast.IChromecast
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val orientationListener: OrientationEventListener by lazy { SmartOrientationListener(this) }
+    private var pendingShortcutAction: String? = null
 
     /**
      * Passes back press events onto the currently visible [Fragment] if it implements the [BackPressInterceptor] interface.
@@ -138,11 +141,30 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        if (savedInstanceState == null) {
+            handleIntent(intent)
+        }
+
         // Handle back presses
         onBackPressedDispatcher.addCallback(this, onBackPressed = onBackPressedCallback)
 
         // Setup Chromecast
         chromecast.initializePlugin(this)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent?.action == "org.jellyfin.OPEN_DOWNLOADS") {
+            pendingShortcutAction = intent.action
+            if (AndroidVersion.isAtLeastNMR1) {
+                getSystemService(ShortcutManager::class.java)?.reportShortcutUsed("downloads")
+            }
+        }
     }
 
     override fun onStart() {
@@ -172,6 +194,17 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            if (state !is ServerState.Pending) {
+                handlePendingShortcut()
+            }
+        }
+    }
+
+    private fun handlePendingShortcut() {
+        if (pendingShortcutAction == "org.jellyfin.OPEN_DOWNLOADS") {
+            pendingShortcutAction = null
+            activityEventHandler.emit(ActivityEvent.OpenDownloads)
         }
     }
 
