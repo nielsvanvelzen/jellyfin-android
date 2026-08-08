@@ -32,6 +32,7 @@ import org.jellyfin.mobile.downloads.DownloadsViewModel
 import org.jellyfin.mobile.downloads.FileDownloader
 import org.jellyfin.mobile.events.ActivityEventHandler
 import org.jellyfin.mobile.onboarding.OnboardingFragment
+import org.jellyfin.mobile.onboarding.OnboardingViewModel
 import org.jellyfin.mobile.player.deviceprofile.DeviceProfileBuilder
 import org.jellyfin.mobile.player.interaction.PlayerEvent
 import org.jellyfin.mobile.player.mediasegments.MediaSegmentRepository
@@ -81,6 +82,7 @@ val applicationModule = module {
     // ViewModels
     viewModel { MainViewModel(get(), get(), get()) }
     viewModel { DownloadsViewModel() }
+    viewModel { OnboardingViewModel(get(), get(), get(), get()) }
 
     // Fragments
     fragment { WebViewFragment() }

@@ -180,6 +180,20 @@
     <string name="download_location_not_set_description">To download media, please select a folder where the files should be stored.</string>
     <string name="download_location_inaccessible">Download location inaccessible</string>
     <string name="download_location_inaccessible_description">The selected download location is no longer accessible. Please select a different folder to resume downloads.</string>
+    <string name="onboarding_welcome_title">Welcome to Jellyfin</string>
+    <string name="onboarding_welcome_description">Setting up your personal media system is just a few steps away.</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_permissions_title">Permissions</string>
+    <string name="onboarding_permissions_description">Jellyfin needs permission to discover servers on your local network. On newer Android versions, this requires Bluetooth access.</string>
+    <string name="onboarding_grant_permission">Grant Permission</string>
+    <string name="onboarding_downloads_title">Offline Downloads</string>
+    <string name="onboarding_downloads_description">Would you like to choose a folder to store downloaded movies and TV shows for offline viewing?</string>
+    <string name="onboarding_choose_location">Choose Location</string>
+    <string name="onboarding_ready_title">You\'re all set!</string>
+    <string name="onboarding_ready_description">Your Jellyfin app is now configured and ready to use.</string>
+    <string name="onboarding_finish">Finish Setup</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
     <string name="pref_start_setup_title">Restart setup</string>
     <string name="pref_start_setup_summary">Go through the initial setup again</string>
 </resources>
