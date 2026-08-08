@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.jellyfin.mobile.app.ApiClientController
+import org.jellyfin.mobile.app.AppPreferences
 import org.jellyfin.mobile.data.entity.ServerEntity
 import org.jellyfin.mobile.data.entity.UserEntity
 import java.util.UUID
@@ -14,6 +15,7 @@ import java.util.UUID
 class MainViewModel(
     app: Application,
     private val apiClientController: ApiClientController,
+    private val appPreferences: AppPreferences,
 ) : AndroidViewModel(app) {
     private val _serverState: MutableStateFlow<ServerState> = MutableStateFlow(ServerState.Pending)
     val serverState: StateFlow<ServerState> get() = _serverState
@@ -23,8 +25,12 @@ class MainViewModel(
 
     init {
         viewModelScope.launch {
-            refreshServer()
-            refreshUser()
+            if (!appPreferences.isOnboardingCompleted) {
+                _serverState.value = ServerState.Onboarding
+            } else {
+                refreshServer()
+                refreshUser()
+            }
         }
     }
 
@@ -37,6 +43,14 @@ class MainViewModel(
     suspend fun setupUser(serverId: Long, userId: UUID, accessToken: String) {
         apiClientController.setupUser(serverId, userId, accessToken)
         refreshUser()
+    }
+
+    fun completeOnboarding() {
+        appPreferences.isOnboardingCompleted = true
+        viewModelScope.launch {
+            refreshServer()
+            refreshUser()
+        }
     }
 
     private suspend fun refreshServer() {
@@ -62,6 +76,7 @@ sealed class ServerState {
     open val server: ServerEntity? = null
 
     object Pending : ServerState()
+    object Onboarding : ServerState()
     object Unset : ServerState()
     class Available(override val server: ServerEntity) : ServerState()
 }

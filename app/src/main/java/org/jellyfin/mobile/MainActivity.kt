@@ -23,6 +23,7 @@ import androidx.lifecycle.withStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.jellyfin.mobile.events.ActivityEventHandler
+import org.jellyfin.mobile.onboarding.OnboardingFragment
 import org.jellyfin.mobile.player.cast.Chromecast
 import org.jellyfin.mobile.player.cast.IChromecast
 import org.jellyfin.mobile.player.ui.PlayerFragment
@@ -157,6 +158,11 @@ class MainActivity : AppCompatActivity() {
             when (state) {
                 ServerState.Pending -> {
                     // TODO add loading indicator
+                }
+                ServerState.Onboarding -> {
+                    if (currentFragment !is OnboardingFragment) {
+                        replaceFragment<OnboardingFragment>()
+                    }
                 }
                 is ServerState.Unset -> {
                     if (currentFragment !is ConnectFragment) {

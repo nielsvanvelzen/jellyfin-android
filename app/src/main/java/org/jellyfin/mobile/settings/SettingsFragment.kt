@@ -22,6 +22,7 @@ import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.preferences.CheckBoxPreference
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import org.jellyfin.mobile.MainActivity
 import org.jellyfin.mobile.R
 import org.jellyfin.mobile.app.AppPreferences
 import org.jellyfin.mobile.app.StorageManager
@@ -289,11 +290,33 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
                 false
             }
         }
+
+        categoryHeader(PREF_CATEGORY_ADVANCED) {
+            titleRes = R.string.pref_category_downloads
+        }
+
+        pref(Constants.PREF_ONBOARDING_COMPLETED) {
+            titleRes = R.string.pref_start_setup_title
+            summaryRes = R.string.pref_start_setup_summary
+            onClick {
+                appPreferences.isOnboardingCompleted = false
+
+                requireActivity().apply {
+                    val intent = Intent(this, MainActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    }
+                    startActivity(intent)
+                }
+
+                true
+            }
+        }
     }
 
     companion object {
         const val PREF_CATEGORY_MUSIC_PLAYER = "pref_category_music"
         const val PREF_CATEGORY_VIDEO_PLAYER = "pref_category_video"
         const val PREF_CATEGORY_DOWNLOADS = "pref_category_downloads"
+        const val PREF_CATEGORY_ADVANCED = "pref_category_advanced"
     }
 }

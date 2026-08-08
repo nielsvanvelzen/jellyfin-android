@@ -56,6 +56,14 @@ class AppPreferences(context: Context) {
             }
         }
 
+    var isOnboardingCompleted: Boolean
+        get() = sharedPreferences.getBoolean(Constants.PREF_ONBOARDING_COMPLETED, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(Constants.PREF_ONBOARDING_COMPLETED, value)
+            }
+        }
+
     var downloadMethod: DownloadMethod
         get() = DownloadMethod.fromInt(sharedPreferences.getInt(Constants.PREF_DOWNLOAD_METHOD, -1)) ?: DownloadMethod.DEFAULT
         set(value) {

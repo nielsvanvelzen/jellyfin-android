@@ -14,11 +14,8 @@ import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
-import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.MediaSource
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.exoplayer.source.SingleSampleMediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.ts.TsExtractor
 import androidx.work.WorkManager
@@ -34,6 +31,7 @@ import org.jellyfin.mobile.downloads.DownloadQueue
 import org.jellyfin.mobile.downloads.DownloadsViewModel
 import org.jellyfin.mobile.downloads.FileDownloader
 import org.jellyfin.mobile.events.ActivityEventHandler
+import org.jellyfin.mobile.onboarding.OnboardingFragment
 import org.jellyfin.mobile.player.deviceprofile.DeviceProfileBuilder
 import org.jellyfin.mobile.player.interaction.PlayerEvent
 import org.jellyfin.mobile.player.mediasegments.MediaSegmentRepository
@@ -81,12 +79,13 @@ val applicationModule = module {
     single { MediaSegments(get()) }
 
     // ViewModels
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { DownloadsViewModel() }
 
     // Fragments
     fragment { WebViewFragment() }
     fragment { PlayerFragment() }
+    fragment { OnboardingFragment() }
 
     // Connection helper
     single { ConnectionHelper(get(), get()) }
